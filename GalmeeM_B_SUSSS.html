@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galmee Barataa – M/SUSSS</title>
+
+<!-- CSS -->
+<style>
+body { font-family: Arial, sans-serif; background: linear-gradient(to right, #74ebd5, #ACB6E5); margin:0; padding:0; }
+.container { max-width:700px; background:white; margin:40px auto; padding:30px; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.3); }
+h2 { text-align:center; color:#333; margin-bottom:20px; font-family: 'Segoe UI', sans-serif; }
+label { font-weight:bold; display:block; margin-top:10px; color:#555; }
+input, select, textarea { width:100%; padding:10px; margin-top:5px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc; font-size:16px; }
+input:focus, select:focus, textarea:focus { outline:none; border-color:#007BFF; }
+button { width:100%; padding:12px; background-color:#007BFF; color:white; font-size:18px; border:none; border-radius:5px; cursor:pointer; margin-top:10px; }
+button:hover { background-color:#0056b3; }
+#msg { margin-top:20px; text-align:center; font-size:16px; color:green; }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+<h2>Galmee Barataa – M/SUSSS</h2>
+<form id="galmeeForm">
+
+<label>Maqaa Barataa</label>
+<input type="text" id="maqaa" placeholder="Maqaa barataa galchi" required>
+
+<label>Maqaa Abbaa</label>
+<input type="text" id="abba" placeholder="Maqaa abbaa galchi" required>
+
+<label>Maqaa Haadha</label>
+<input type="text" id="haadha" placeholder="Maqaa haadha galchi" required>
+
+<label>Maqaa Akaakuu</label>
+<input type="text" id="akaakuu" placeholder="Maqaa akaakuu galchi" required>
+
+<label>Umuri Barataa</label>
+<input type="number" id="umuri" placeholder="Umuri barataa" required>
+
+<label>Saala Barataa</label>
+<select id="saala" required>
+  <option value="">-- Filadhu --</option>
+  <option>Dhiira</option>
+  <option>Dubartii</option>
+</select>
+
+<label>Daree Barnootaa</label>
+<select id="daree" required>
+  <option value="">-- Kutaa filadhu --</option>
+  <option>9</option><option>10</option><option>11</option><option>12</option>
+</select>
+
+<label>Bara Barnoota Duraa</label>
+<input type="text" id="baraDuree" placeholder="Fak: 2022-2023" required>
+
+<label>Qabxii Duraa</label>
+<input type="text" id="qabxii" placeholder="Fak: 85" required>
+
+<label>Lakkoofsa Bilbilaa</label>
+<input type="tel" id="bilbila" placeholder="Tartiba sirrii barreessi" required>
+
+<label>Teessoo</label>
+<textarea id="teessoo" rows="2" placeholder="Magaalaa, Aanaa, Ganda" required></textarea>
+
+<label>Sanadoota Upload</label>
+<input type="file" id="sanadoota" multiple>
+
+<button type="submit">Galmeessi</button>
+<button type="button" onclick="downloadPDF()">Download PDF</button>
+</form>
+
+<p id="msg"></p>
+</div>
+
+<script>
+const form = document.getElementById('galmeeForm');
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  const formData = new FormData(form);
+
+  // Google Sheets integration
+  fetch("YOUR_GOOGLE_SCRIPT_URL", { method:"POST", body: formData })
+  .then(response => response.text())
+  .then(data => { document.getElementById("msg").innerHTML = data; })
+  .catch(err => { document.getElementById("msg").innerHTML = "Dogoggora mudate!"; });
+});
+
+// PDF download
+function downloadPDF(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const maqaa = document.getElementById("maqaa").value;
+  const abba = document.getElementById("abba").value;
+  const haadha = document.getElementById("haadha").value;
+  const akaakuu = document.getElementById("akaakuu").value;
+  const umuri = document.getElementById("umuri").value;
+  const saala = document.getElementById("saala").value;
+  const daree = document.getElementById("daree").value;
+  const bara = document.getElementById("baraDuree").value;
+  const qabxii = document.getElementById("qabxii").value;
+  const bilbila = document.getElementById("bilbila").value;
+  const teessoo = document.getElementById("teessoo").value;
+
+  doc.setFontSize(14);
+  doc.text("Galmee Barataa – M/SUSSS", 20, 20);
+  doc.text(`Barataa: ${maqaa}`, 20, 30);
+  doc.text(`Abbaa: ${abba}`, 20, 40);
+  doc.text(`Haadha: ${haadha}`, 20, 50);
+  doc.text(`Akaakuu: ${akaakuu}`, 20, 60);
+  doc.text(`Umuri: ${umuri}`, 20, 70);
+  doc.text(`Saala: ${saala}`, 20, 80);
+  doc.text(`Daree: ${daree}`, 20, 90);
+  doc.text(`Bara Duree: ${bara}`, 20, 100);
+  doc.text(`Qabxii: ${qabxii}`, 20, 110);
+  doc.text(`Bilbilaa: ${bilbila}`, 20, 120);
+  doc.text(`Teessoo: ${teessoo}`, 20, 130);
+  doc.save("Galmee_Barataa.pdf");
+}
+</script>
+</body>
+</html>
